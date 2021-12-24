@@ -1,11 +1,12 @@
-package com.nkl.mcot.erp.controller;
-
+package com.nkl.nmu.erp.supplies.controller; 
 import static java.lang.Class.forName;
 import java.sql.Connection;
 import static java.sql.DriverManager.getConnection;
 import java.sql.SQLException;
-
+;
 public class Consql {
+
+    
 
     public static Connection getCon() {
         Connection con = null;

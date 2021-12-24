@@ -63,7 +63,7 @@
     </servlet>
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>com.nkl.mcot.erp.controller.ControllerServlet</servlet-class>
+        <servlet-class>com.nkl.nmu.erp.supplies.controller.ControllerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletAdaptor</servlet-name>
@@ -122,15 +122,13 @@
         <servlet-name>imc004</servlet-name>
         <url-pattern>/imc004</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>ServletAdaptor</servlet-name>
-        <url-pattern>/webresources/*</url-pattern>
+        <url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
