@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="imc003" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6eab6d65-6a9b-4395-8919-76463957df50">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <parameter name="c_yyyy_mm" class="java.lang.String"/>
+    <parameter name="title_name" class="java.lang.String"/>
+    <parameter name="dis_month" class="java.lang.String"/>
+    <parameter name="dis_year" class="java.lang.String"/>
+    <queryString>
+		<![CDATA[SELECT
+     (b.c_code+' '+b.c_name) AS c_name,
+     sum(d.f_total_cost) AS f_total_cost,
+     sum(d.f_disc_com_amt) AS f_disc_com_amt,
+     sum(d.f_disc_cash_amt) AS f_disc_cash_amt,
+     a."ar_so_hdr_id",
+     a."dc_cnt_id",
+     a."c_code",
+     a."i_is_sale_external",
+     a."cnt_emp_id",
+     a."dc_comm_id",
+     a."d_so_date",
+     a."c_so_no",
+     a."c_po_no",
+     a."c_comment",
+     a."c_advertising",
+     a."dc_cost_id" AS dc_cost_id,
+     d."dc_product_type_id" AS dc_product_type_id,
+     b."dc_cnt_type_id" AS dc_cnt_type_id,
+(select c_name from dc_cnt_type where dc_cnt_type_id=b."dc_cnt_type_id") as dc_cnt_type_name,
+(select c_name from dc_product_type where dc_product_type_id=d."dc_product_type_id") as product_type_name,
+(select c_name from dc_cost where dc_cost_id=a."dc_cost_id") as dc_cost_name
+FROM "ar_so_hdr" a
+     INNER JOIN "vw_ar_so_dtl_tv" d ON d."ar_so_hdr_id" = a."ar_so_hdr_id" and d."i_enabled" = 1
+     INNER JOIN "dbo"."vw_customer" b ON a."dc_cnt_id" = b."dc_cnt_id"
+WHERE
+     a.c_code! = '0'
+     and a.i_enabled = 1
+     and a.i_class_type = 1
+     and a.onair_yyyy_mm = $P{c_yyyy_mm}
+     and a.i_is_commit = 1
+     and ISNULL(a.dc_comm_id,0)! = 0
+GROUP BY
+     a.ar_so_hdr_id,
+     a.dc_cnt_id,
+     a.c_code,
+     a.i_is_sale_external,
+     a.cnt_emp_id,
+     a.dc_comm_id,
+     a.d_so_date,
+     a.c_so_no,
+     a.c_po_no,
+     a.c_comment,
+     a.c_advertising,
+     b.c_code,
+     b.c_name,
+     a.dc_cost_id,
+     d.dc_product_type_id,
+     b.dc_cnt_type_id
+ORDER BY
+     d.dc_product_type_id ASC,
+     a.dc_cost_id ASC,
+     b.dc_cnt_type_id ASC,
+     b.c_code ASC,
+     a.c_code ASC]]>
+    </queryString>
+    <field name="c_name" class="java.lang.String"/>
+    <field name="f_total_cost" class="java.math.BigDecimal"/>
+    <field name="f_disc_com_amt" class="java.math.BigDecimal"/>
+    <field name="f_disc_cash_amt" class="java.math.BigDecimal"/>
+    <field name="ar_so_hdr_id" class="java.math.BigDecimal"/>
+    <field name="dc_cnt_id" class="java.math.BigDecimal"/>
+    <field name="c_code" class="java.lang.String"/>
+    <field name="i_is_sale_external" class="java.lang.Short"/>
+    <field name="cnt_emp_id" class="java.math.BigDecimal"/>
+    <field name="dc_comm_id" class="java.math.BigDecimal"/>
+    <field name="d_so_date" class="java.sql.Timestamp"/>
+    <field name="c_so_no" class="java.lang.String"/>
+    <field name="c_po_no" class="java.lang.String"/>
+    <field name="c_comment" class="java.lang.String"/>
+    <field name="c_advertising" class="java.lang.String"/>
+    <field name="dc_cost_id" class="java.math.BigDecimal"/>
+    <field name="dc_product_type_id" class="java.math.BigDecimal"/>
+    <field name="dc_cnt_type_id" class="java.math.BigDecimal"/>
+    <field name="dc_cnt_type_name" class="java.lang.String"/>
+    <field name="product_type_name" class="java.lang.String"/>
+    <field name="dc_cost_name" class="java.lang.String"/>
+    <variable name="f_total_cost_1" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_1" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_1" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_2" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_2" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_3" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_3" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_2" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_4" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_4" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_3" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_5" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cnt_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_5" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_4" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_6" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_cost_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_6" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_5" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_7" class="java.math.BigDecimal" resetType="Group" resetGroup="dc_product_type_id" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_total_cost_7" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_total_cost}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_com_amt_6" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_com_amt}]]></variableExpression>
+    </variable>
+    <variable name="f_disc_cash_amt_8" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{f_disc_cash_amt}]]></variableExpression>
+    </variable>
+    <group name="dc_product_type_id">
+        <groupExpression><![CDATA[$F{dc_product_type_id}]]></groupExpression>
+        <groupHeader>
+            <band height="28">
+                <textField>
+                    <reportElement x="0" y="0" width="450" height="28" uuid="b1d8d0c5-c6d6-4d0e-a41d-f7861da1855d"/>
+                    <textElement>
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{product_type_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band height="20">
+                <textField>
+                    <reportElement x="700" y="0" width="100" height="20" uuid="588a9291-1ee8-4f50-986e-0db8ebcdaa2f"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_total_cost_6})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="600" y="0" width="100" height="20" uuid="63c4b33b-6602-40c0-8ff2-0c88d4b000f3"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_com_amt_5})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="512" y="0" width="88" height="20" uuid="442ad5f8-bb76-4b23-8890-5b993151e384"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_cash_amt_7})]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="470" y="0" width="27" height="20" uuid="c95159c9-ffb4-4e1b-a956-8aab43c770a0"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[รวม]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="222" y="0" width="248" height="20" uuid="98286817-bcd1-466b-9b94-09c076c904df"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{product_type_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+    <group name="dc_cost_id">
+        <groupExpression><![CDATA[$F{dc_cost_id}]]></groupExpression>
+        <groupHeader>
+            <band height="25">
+                <textField>
+                    <reportElement x="5" y="0" width="450" height="25" uuid="897d71c9-31aa-4b4a-89f2-11e45d227e90"/>
+                    <textElement>
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{dc_cost_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band height="24">
+                <textField>
+                    <reportElement x="700" y="0" width="100" height="24" uuid="5d8d43a4-bc1e-46a2-82fb-92977c9a1efc"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_total_cost_5})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="601" y="0" width="100" height="24" uuid="32847c45-7634-47de-835a-e7317003d8fd"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_com_amt_4})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="512" y="0" width="88" height="24" uuid="b466c26b-d890-4bc7-88e0-fad43d3ac68b"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_cash_amt_6})]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="470" y="0" width="27" height="24" uuid="335a74a3-062d-4517-8429-144b57af2f99"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[รวม]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="222" y="0" width="248" height="20" uuid="57b2af5e-3934-4803-9ba3-783f9a1fb68a"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{dc_cost_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+    <group name="dc_cnt_type_id">
+        <groupExpression><![CDATA[$F{dc_cnt_type_id}]]></groupExpression>
+        <groupHeader>
+            <band height="28">
+                <textField>
+                    <reportElement x="10" y="0" width="450" height="28" uuid="5ec5e9f6-e25a-44e8-a600-7b99a9aca9ef"/>
+                    <textElement>
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{dc_cnt_type_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band height="23">
+                <textField>
+                    <reportElement x="700" y="0" width="100" height="23" uuid="c3d613a5-4570-4e18-bd4f-6fd59ebfc56d"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_total_cost_4})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="600" y="0" width="100" height="23" uuid="d5ecbc19-efb1-4d4a-a90b-c005c6ac4b1b"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_com_amt_3})]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="513" y="0" width="88" height="23" uuid="fb1c0f67-7314-4ae0-a9ba-b235a706be38"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_cash_amt_5})]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="470" y="0" width="27" height="23" uuid="c8cb5e9d-6ebe-494a-a28c-48ba065c859b"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[รวม]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="222" y="0" width="248" height="20" uuid="439fdb27-82b3-4d60-9f0b-6bfc8cc5927a"/>
+                    <textElement textAlignment="Right">
+                        <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{dc_cnt_type_name}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="128" splitType="Stretch">
+            <staticText>
+                <reportElement x="265" y="67" width="240" height="21" uuid="2de15839-5097-4fb0-9038-7fbacb8e829e"/>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[รายงานสรุปยอดขาย IMC โทรทัศน์ (รายเดือน)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="88" width="199" height="20" uuid="389bc03c-5f06-460a-a9ef-8c15a9303c03"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ประจำเดือน : ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="65" y="88" width="70" height="20" uuid="a305e3e0-25fd-47ed-8c5e-63d094bf1165"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{dis_month}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="135" y="88" width="64" height="20" uuid="a4eda091-0e03-4962-a489-2706a094c15c"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{dis_year}]]></textFieldExpression>
+            </textField>
+            <image>
+                <reportElement x="363" y="0" width="60" height="60" uuid="52860924-0c1a-4bda-9d4e-195e005b8931"/>
+                <imageExpression><![CDATA["E:\\www\\mcot-rep-imc\\web\\reports\\mcot-100.png"]]></imageExpression>
+            </image>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="21" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="38" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="0" width="802" height="38" backcolor="#C0C0C0" uuid="210d4d74-307e-47f0-92b5-8d18768644fc"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="315" y="0" width="108" height="38" uuid="5518897a-ced8-42a2-af5c-38854923ee70"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่ใบสั่งโฆษณา(Order)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="421" y="0" width="91" height="38" uuid="1409493f-eb14-4770-8085-5ad22a627c0e"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Justified">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่ใบสั่งซื้อจากลูกค้า]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="601" y="0" width="107" height="38" uuid="08884ff6-bf79-4f3e-83eb-58e34d9ccfee"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[จำนวนเงินหลังหักส่วน ลดการค้า]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="512" y="0" width="88" height="38" uuid="62c61a8a-0f2b-4ada-aea6-e57393dc78ba"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[ส่วนลดล่วงหน้า / ส่วนลดเงินสด]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="0" width="222" height="38" uuid="7ba6b7ab-1b93-4fa2-907e-4f3b639ed1ad"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[ชื่อลูกค้า]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="222" y="0" width="93" height="38" uuid="a4e93b25-6fb4-4f5d-9c55-aa6bc6b2b85f"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่ Order]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="708" y="0" width="94" height="38" uuid="988ca48c-2779-482b-a0f9-cb97a02609dc"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[จำนวนเงินสุทธิ]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="42" splitType="Stretch">
+            <textField>
+                <reportElement x="421" y="0" width="91" height="25" uuid="367ef905-7461-47e4-97c6-b61f5599f42d"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{c_so_no}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="315" y="0" width="106" height="25" uuid="9b8f7f88-d0fe-49cc-9d03-62964f0e0d6d"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{c_po_no}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="222" y="0" width="93" height="25" uuid="1715a020-d931-4392-8b8d-7e31a6491936"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{c_code}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="17" y="0" width="205" height="42" uuid="ab845771-3544-43fb-89af-d3af91ad87ca"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{c_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="600" y="0" width="100" height="25" uuid="52e4d6f5-d7b9-401e-bbad-9e36c946b17f"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{f_disc_com_amt})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="700" y="0" width="102" height="25" uuid="b60b1522-0ba3-43a1-858a-c59d96b304f7"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{f_total_cost})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="512" y="0" width="88" height="25" uuid="1393320a-1fdd-4af3-b796-787a3106db5a"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{f_disc_cash_amt})]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="21" splitType="Stretch">
+            <staticText>
+                <reportElement x="350" y="0" width="147" height="20" uuid="28d26b01-7179-46e4-b8d2-1ecf9f330f87"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[รวมทั้งหมด]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="700" y="0" width="100" height="20" uuid="65a1e84c-3af0-4b0c-b733-300e21762853"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_total_cost_7})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="600" y="0" width="100" height="20" uuid="568bc129-09f9-48ae-9a5a-3d58b0d0aea1"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_com_amt_6})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="512" y="0" width="88" height="20" uuid="0022b71a-edab-4ca5-87b7-153ce6b700b4"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{f_disc_cash_amt_8})]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

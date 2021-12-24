@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>prefer_system_php_exec</param-name>
+        <param-value>On</param-value>
+    </context-param>
+    <!-- Handle PHP urls which cannot be expressed using a standard servlet spec 2.2 url-pattern,
+    e.g.: *.php/delete/from?what=that You may remove this and the filter-mapping below -->
+    <filter>
+        <filter-name>PhpCGIFilter</filter-name>
+        <filter-class>php.java.servlet.PhpCGIFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PhpCGIFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- Attach the JSR223 script factory to the servlet context -->
+    <listener>
+        <listener-class>php.java.servlet.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- PHP Servlet: back-end for Apache or IIS -->
+    <servlet>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <servlet-class>php.java.servlet.PhpJavaServlet</servlet-class>
+    </servlet>
+    <!-- PHP CGI servlet: when IIS or Apache are not available -->
+    <servlet>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <servlet-class>php.java.servlet.fastcgi.FastCGIServlet</servlet-class>
+    </servlet>
+    <!-- PHP Servlet Mapping -->
+    <servlet>
+        <servlet-name>DcCntTest</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.DcCntTest</servlet-class>
+    </servlet>
+    <servlet>
+        <description>ArBillingPrePrint</description>
+        <servlet-name>ArBillingPrePrint</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.ArBillingPrePrint</servlet-class>
+    </servlet>
+    <servlet>
+        <description>Report2</description>
+        <servlet-name>Report2</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.Report2</servlet-class>
+    </servlet>
+    <servlet>
+        <description>imc001-report</description>
+        <servlet-name>imc001</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.imc001</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>imc002</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.imc002</servlet-class>
+    </servlet>
+    <servlet>
+        <description>imc003-report</description>
+        <servlet-name>imc003</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.imc003</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>imc004</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.report.imc004</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>com.nkl.mcot.erp.controller.ControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+        <init-param>
+            <description>Multiple packages, separated by semicolon(;), can be specified in param-value</description>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.nkl.mcot.erp.controller.service</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <url-pattern>*.phpjavabridge</url-pattern>
+    </servlet-mapping>
+    <!-- PHP CGI Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <url-pattern>*.php</url-pattern>
+    </servlet-mapping>
+    <!-- Welcome files -->
+    <welcome-file-list>
+        <welcome-file>index.php</welcome-file>
+    </welcome-file-list>
+    <servlet-mapping>
+        <servlet-name>DcCntTest</servlet-name>
+        <url-pattern>/DcCntTest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ArBillingPrePrint</servlet-name>
+        <url-pattern>/ArBillingPrePrint</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Report2</servlet-name>
+        <url-pattern>/Report2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>imc001</servlet-name>
+        <url-pattern>/imc001</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>imc002</servlet-name>
+        <url-pattern>/imc002</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>imc003</servlet-name>
+        <url-pattern>/imc003</url-pattern>
+    </servlet-mapping>
+    <!-- Start thai as front controller -->
+    <!-- End thai as front controller -->
+    <servlet-mapping>
+        <servlet-name>imc004</servlet-name>
+        <url-pattern>/imc004</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <url-pattern>/webresources/*</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>

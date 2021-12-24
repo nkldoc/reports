@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="imc001" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6eab6d65-6a9b-4395-8919-76463957df50">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <parameter name="c_yyyy_mm" class="java.lang.String">
+        <defaultValueExpression><![CDATA[]]></defaultValueExpression>
+    </parameter>
+    <parameter name="title_name" class="java.lang.String"/>
+    <parameter name="dis_month" class="java.lang.String"/>
+    <parameter name="dis_year" class="java.lang.String"/>
+    <parameter name="c_yyyy_mm2" class="java.lang.String"/>
+    <parameter name="dis_month2" class="java.lang.String"/>
+    <parameter name="dis_year2" class="java.lang.String"/>
+    <queryString>
+		<![CDATA[SELECT
+     pj_hdr."c_code" AS pj_hdr_c_code,
+     pj_hdr."c_name" AS pj_hdr_c_name,
+     pj_hdr."dc_cost_id" AS pj_hdr_dc_cost_id,
+     (select top 1 c_name from dc_cost where dc_cost_id=pj_hdr."dc_cost_id") as dc_cost_name,
+     (select top 1 c_name from dc_cnt where dc_cnt_id=pj_hdr."dc_cnt_id") as dc_cnt_name,
+     pj_hdr."dc_cnt_id" AS pj_hdr_dc_cnt_id,
+     pj_hdr."c_contract_no" AS pj_hdr_c_contract_no,
+     pj_hdr."c_doc_bespeak" AS pj_hdr_c_doc_bespeak,
+     convert(varchar, pj_hdr."d_start", 120) AS pj_hdr_d_start,
+     convert(varchar, pj_hdr."d_finish", 120) AS pj_hdr_d_finish,
+     pj_hdr."f_budget" AS pj_hdr_f_budget,
+     pj_hdr."i_is_success" AS pj_hdr_i_is_success,
+CASE
+    WHEN pj_hdr."i_is_success" = 1 THEN 'ปิด'
+    ELSE 'เปิด'
+END AS status_name
+
+FROM
+     "dbo"."pj_hdr" pj_hdr
+WHERE pj_hdr."c_code" !='0'
+and dbo.get_stryyyy_mm(pj_hdr."d_start") between $P{c_yyyy_mm} and $P{c_yyyy_mm2}]]>
+    </queryString>
+    <field name="pj_hdr_c_code" class="java.lang.String"/>
+    <field name="pj_hdr_c_name" class="java.lang.String"/>
+    <field name="pj_hdr_dc_cost_id" class="java.math.BigDecimal"/>
+    <field name="dc_cost_name" class="java.lang.String"/>
+    <field name="dc_cnt_name" class="java.lang.String"/>
+    <field name="pj_hdr_dc_cnt_id" class="java.math.BigDecimal"/>
+    <field name="pj_hdr_c_contract_no" class="java.lang.String"/>
+    <field name="pj_hdr_c_doc_bespeak" class="java.lang.String"/>
+    <field name="pj_hdr_d_start" class="java.lang.String"/>
+    <field name="pj_hdr_d_finish" class="java.lang.String"/>
+    <field name="pj_hdr_f_budget" class="java.math.BigDecimal"/>
+    <field name="pj_hdr_i_is_success" class="java.lang.String"/>
+    <field name="status_name" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="149" splitType="Stretch">
+            <staticText>
+                <reportElement x="265" y="60" width="247" height="28" uuid="2de15839-5097-4fb0-9038-7fbacb8e829e"/>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="16" isBold="true" isUnderline="false"/>
+                </textElement>
+                <text><![CDATA[รายงาน Order งานโครงการ (โครงการ)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="88" width="129" height="20" uuid="389bc03c-5f06-460a-a9ef-8c15a9303c03"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[วันที่เริ่มโครงการตั้งแต่เดือน : ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="129" y="88" width="58" height="20" uuid="a305e3e0-25fd-47ed-8c5e-63d094bf1165"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" "+$P{dis_month}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="193" y="88" width="64" height="20" uuid="a4eda091-0e03-4962-a489-2706a094c15c"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{dis_year}]]></textFieldExpression>
+            </textField>
+            <image>
+                <reportElement x="363" y="0" width="60" height="60" uuid="52860924-0c1a-4bda-9d4e-195e005b8931"/>
+                <imageExpression><![CDATA["E:\\www\\mcot-rep-imc\\web\\reports\\mcot-60.jpg"]]></imageExpression>
+            </image>
+            <staticText>
+                <reportElement x="0" y="108" width="129" height="20" uuid="24fb338f-9fd1-4770-9406-1857debafb8e"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ถึง : ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="193" y="107" width="64" height="20" uuid="942121d4-ccd4-4c92-91bf-3c8d5b6b75d7"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{dis_year2}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="129" y="107" width="58" height="20" uuid="f17ca70d-0481-407d-bad0-873e8a82b588"/>
+                <textElement>
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" "+$P{dis_month2}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="15" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="46" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="1" width="802" height="38" backcolor="#C0C0C0" uuid="210d4d74-307e-47f0-92b5-8d18768644fc"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="486" y="0" width="70" height="38" uuid="5518897a-ced8-42a2-af5c-38854923ee70"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่ e-GP]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="630" y="1" width="52" height="38" forecolor="#000000" backcolor="#FFFFFF" uuid="62c61a8a-0f2b-4ada-aea6-e57393dc78ba"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+                    <font fontName="TH Sarabun New" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                    <paragraph lineSpacing="Single"/>
+                </textElement>
+                <text><![CDATA[วันที่เริ่ม]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="556" y="0" width="74" height="38" uuid="1409493f-eb14-4770-8085-5ad22a627c0e"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่ Package]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="102" y="1" width="120" height="38" uuid="7ba6b7ab-1b93-4fa2-907e-4f3b639ed1ad"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[ชื่อโครงการ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="433" y="0" width="53" height="38" uuid="a4e93b25-6fb4-4f5d-9c55-aa6bc6b2b85f"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[เลขที่สัญญา]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="682" y="1" width="60" height="38" uuid="08884ff6-bf79-4f3e-83eb-58e34d9ccfee"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[วันที่สิ้นสุด]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="1" width="40" height="37" forecolor="#000000" backcolor="#FFFFFF" uuid="a7061c68-1a3d-4b6c-814e-57aab057287b"/>
+                <textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+                    <font fontName="TH Sarabun New" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                    <paragraph lineSpacing="Single"/>
+                </textElement>
+                <text><![CDATA[ลำดับ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="742" y="1" width="60" height="38" uuid="988ca48c-2779-482b-a0f9-cb97a02609dc"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[งบประมาณ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="40" y="0" width="62" height="39" forecolor="#000000" backcolor="#FFFFFF" uuid="7ebea04a-aec9-4ae5-b268-f75b17344f7c"/>
+                <textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+                    <font fontName="TH Sarabun New" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                    <paragraph lineSpacing="Single"/>
+                </textElement>
+                <text><![CDATA[รหัสโครงการ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="222" y="1" width="93" height="38" uuid="05c9ec1e-0fa6-4998-942f-75b6f9083e0f"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[หน่วยงานที่รับ Order]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="315" y="0" width="118" height="38" uuid="5dd3d277-0c20-4017-9a99-02a2a2067a32"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="TH Sarabun New" size="14"/>
+                </textElement>
+                <text><![CDATA[คู่สัญญา]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="42" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="40" height="20" uuid="d65cc695-c72b-44eb-893b-67347d5d1e65"/>
+                <textElement>
+                    <paragraph leftIndent="6"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="40" y="0" width="62" height="20" uuid="d59bbec7-9395-401f-a8b8-ae402e2a5d03"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_c_code}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="102" y="0" width="120" height="20" uuid="7b419e0f-f37a-4054-b1ae-fa43394c59b5"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_c_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="222" y="0" width="93" height="20" uuid="7dd8a37d-c071-40cc-bfea-a08c3a73a60d"/>
+                <textFieldExpression><![CDATA[$F{dc_cost_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="315" y="0" width="118" height="20" uuid="22d0976d-dcfa-4ac1-99e6-dba2cd20c3c3"/>
+                <textFieldExpression><![CDATA[$F{dc_cnt_name}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="433" y="0" width="53" height="20" uuid="e932a968-409d-4d45-8a34-215833601ffb"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_c_contract_no}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="486" y="0" width="70" height="20" uuid="9cfb0756-f2b3-40dd-8d42-5a5f5c166653"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_c_doc_bespeak}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="556" y="0" width="74" height="20" uuid="5c452a89-96ec-43ca-9993-cd5ecd979a19"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_c_doc_bespeak}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="630" y="0" width="62" height="20" uuid="ea93bf0e-c216-4aaf-a5ec-90ee692f7fce"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_d_start}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="754" y="0" width="48" height="20" uuid="2a838ffd-172e-4028-9ec1-cb5c8930dc1c"/>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{pj_hdr_f_budget})]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="692" y="0" width="62" height="20" uuid="86ce3c8f-5d72-40a3-b5ca-9b147e85bcd5"/>
+                <textFieldExpression><![CDATA[$F{pj_hdr_d_finish}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="21" splitType="Stretch">
+            <staticText>
+                <reportElement x="350" y="0" width="147" height="20" uuid="28d26b01-7179-46e4-b8d2-1ecf9f330f87"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[รวมทั้งหมด]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="700" y="0" width="100" height="20" uuid="65a1e84c-3af0-4b0c-b733-300e21762853"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="600" y="0" width="100" height="20" uuid="568bc129-09f9-48ae-9a5a-3d58b0d0aea1"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="512" y="0" width="88" height="20" uuid="0022b71a-edab-4ca5-87b7-153ce6b700b4"/>
+                <textElement textAlignment="Right">
+                    <font fontName="TH Sarabun New" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
